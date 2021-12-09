@@ -1,7 +1,13 @@
 package main
 
-import "rain-csv-parser/src/parser"
+import (
+	"fmt"
+)
+
+func run() {
+	fmt.Println("Parser running...")
+}
 
 func main() {
-	parser.Run()
+	run()
 }
