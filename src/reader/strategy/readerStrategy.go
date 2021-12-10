@@ -2,8 +2,8 @@ package strategy
 
 import (
 	"errors"
-	"rain-csv-parser/src/pkg/reader/domain"
-	"rain-csv-parser/src/pkg/reader/strategy/csv"
+	"rain-csv-parser/src/domain"
+	"rain-csv-parser/src/reader/strategy/csv"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 )
 
 type ReaderStrategy interface {
-	ReadFile(filePath string) (*domain.InputMatrix, error)
+	ReadFile(filePath string) (*domain.MatrixDomain, error)
 }
 
 type readerStrategySelector struct {

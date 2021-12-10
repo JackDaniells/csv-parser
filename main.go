@@ -2,31 +2,40 @@ package main
 
 import (
 	"fmt"
-	reader "rain-csv-parser/src/pkg/reader"
+	"rain-csv-parser/src/commons/constants"
+	"rain-csv-parser/src/reader"
 )
 
 const (
 	INPUT_FOLDER = "input"
 	OUTPUT_FILE  = "output"
-
-	CSV_EXTENSION = "csv"
 )
 
-func run() {
+func run() error {
 	fmt.Println("Initializing parser...")
 
-	readerModule, err := reader.NewReader(INPUT_FOLDER, CSV_EXTENSION)
+	readerCSV, err := reader.NewReaderModule(INPUT_FOLDER, constants.CSV_EXTENSION)
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 
 	fmt.Println("Parser running!")
 
 	fmt.Println(fmt.Sprintf("Reading all files from %s folder", INPUT_FOLDER))
-	readerModule.Read()
+	files, err := readerCSV.Read()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(files)
+
+	return nil
 
 }
 
 func main() {
-	run()
+	err := run()
+	if err != nil {
+		panic(err)
+	}
 }
