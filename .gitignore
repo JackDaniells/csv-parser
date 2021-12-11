@@ -14,5 +14,8 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-.idea/
+# Ide files
+.idea/*
+
+# Output of the application
 output/*
