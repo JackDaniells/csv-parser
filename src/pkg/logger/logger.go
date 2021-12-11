@@ -29,6 +29,6 @@ func Error() *logger {
 	return &logger{level: LOGGER_LEVEL_ERROR}
 }
 
-func (l *logger) Log(message string) {
+func (l *logger) Log(message ...string) {
 	fmt.Println(fmt.Sprintf("[level:%s] message: %s", l.level, message))
 }

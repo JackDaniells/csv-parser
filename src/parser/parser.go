@@ -1,11 +1,11 @@
-package standardizer
+package parser
 
 import "rain-csv-parser/src/domain"
 
 type standardizerService struct {
 }
 
-func NewStandardizerService() *standardizerService {
+func NewParserService() *standardizerService {
 	return &standardizerService{}
 }
 
