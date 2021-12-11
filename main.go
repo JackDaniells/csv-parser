@@ -2,35 +2,40 @@ package main
 
 import (
 	"fmt"
-	"rain-csv-parser/src/commons/constants"
+	"rain-csv-parser/src/iostrategy"
 	"rain-csv-parser/src/reader"
+	"rain-csv-parser/src/writer"
 )
 
 const (
-	INPUT_FOLDER = "input"
-	OUTPUT_FILE  = "output"
+	EXTENSION = "csv"
+
+	OUTPUT_FILE = "output"
 )
 
 func run() error {
 	fmt.Println("Initializing parser...")
-
-	readerCSV, err := reader.NewReaderModule(INPUT_FOLDER, constants.CSV_EXTENSION)
+	csvStrategy, err := iostrategy.NewIOStrategySelector().GetStrategy(EXTENSION)
 	if err != nil {
 		return err
 	}
-
+	readerService := reader.NewReaderService(csvStrategy)
+	writerService := writer.NewWriterService(csvStrategy)
 	fmt.Println("Parser running!")
 
-	fmt.Println(fmt.Sprintf("Reading all files from %s folder", INPUT_FOLDER))
-	files, err := readerCSV.Read()
+	fmt.Println("Reading file...")
+	dataMatrix, err := readerService.Read("input/roster1.csv")
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(files)
+	fmt.Println("Writing file...")
+	err = writerService.Write(dataMatrix, "output/roster1.csv")
+	if err != nil {
+		return err
+	}
 
 	return nil
-
 }
 
 func main() {

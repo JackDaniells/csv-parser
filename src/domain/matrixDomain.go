@@ -4,6 +4,12 @@ type MatrixDomain struct {
 	Data [][]string
 }
 
+func NewMatrixDomain(data [][]string) *MatrixDomain {
+	return &MatrixDomain{
+		Data: data,
+	}
+}
+
 func (m *MatrixDomain) IsEmpty() bool {
 	return len(m.Data) == 0
 }
