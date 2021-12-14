@@ -1,7 +1,7 @@
 package domain
 
-func BuildSampleMatrixDomainData() *MatrixDomain {
-	return &MatrixDomain{
+func BuildSampleMatrixDomainData() *TableDomain {
+	return &TableDomain{
 		Data: [][]string{
 			{"h0", "h1", "h2"},
 			{"d00", "d01", "d03"},
