@@ -23,19 +23,19 @@ func createTableColumns() domain.TableColumnSchemas {
 		},
 		{
 			Name:          constants.HeaderFullName,
-			PossibleWords: []string{"n.", "name"},
+			PossibleWords: []string{"n.", "name", "noun"},
 			Unique:        false,
 			Required:      true,
 		},
 		{
 			Name:          constants.HeaderFirstName,
-			PossibleWords: []string{"f.", "first"},
+			PossibleWords: []string{"f.", "first", "initial", "primary"},
 			Unique:        false,
 			Required:      false,
 		},
 		{
 			Name:          constants.HeaderLastName,
-			PossibleWords: []string{"l.", "last"},
+			PossibleWords: []string{"l.", "last", "latter", "final"},
 			Unique:        false,
 			Required:      false,
 		},
