@@ -3,34 +3,41 @@ package main
 import (
 	"fmt"
 	"rain-csv-parser/src/iostrategy"
+	"rain-csv-parser/src/iostrategy/implementations/csv"
+	"rain-csv-parser/src/parser"
+	"rain-csv-parser/src/pkg/logger"
 	"rain-csv-parser/src/reader"
 	"rain-csv-parser/src/writer"
 )
 
-const (
-	EXTENSION = "csv"
-
-	OUTPUT_FILE = "output"
-)
-
 func run() error {
-	fmt.Println("Initializing parser...")
-	csvStrategy, err := iostrategy.NewIOStrategySelector().GetStrategy(EXTENSION)
+	logger.Info().Log("Initializing application...")
+	tableColumns := createTableColumns()
+	matcherSelector := createMatcherSelector()
+	columnGrouper := createColumnGrouper()
+
+	csvStrategy := csv.NewCSVStrategyImplementation()
+	strategySelector := iostrategy.NewIOStrategySelector()
+	strategySelector.AddStrategy(csvStrategy)
+	strategy, err := strategySelector.GetStrategy(FORMAT)
 	if err != nil {
 		return err
 	}
-	readerService := reader.NewReaderService(csvStrategy)
-	writerService := writer.NewWriterService(csvStrategy)
-	fmt.Println("Parser running!")
+	readerService := reader.NewReaderService(strategy)
+	writerService := writer.NewWriterService(strategy)
+	parserService := parser.NewParserService(tableColumns, matcherSelector, columnGrouper)
 
-	fmt.Println("Reading file...")
-	dataMatrix, err := readerService.Read("input/roster1.csv")
+	inputTable, err := readerService.Read(fmt.Sprintf("%s.%s", INPUT_PATH, FORMAT))
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("Writing file...")
-	err = writerService.Write(dataMatrix, "output/roster1.csv")
+	stdTable, err := parserService.Standardize(inputTable)
+	if err != nil {
+		return err
+	}
+
+	err = writerService.Write(stdTable, fmt.Sprintf("%s_correct.%s", OUTPUT_PATH, FORMAT))
 	if err != nil {
 		return err
 	}
@@ -41,6 +48,6 @@ func run() error {
 func main() {
 	err := run()
 	if err != nil {
-		panic(err)
+		logger.Error().Log("Application exited with error!")
 	}
 }
