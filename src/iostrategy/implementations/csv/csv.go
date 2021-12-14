@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	EXTENSION = "csv"
+	csvExtension = "csv"
 )
 
 type (
@@ -19,8 +19,12 @@ type (
 
 type csvImplementation struct{}
 
-func NewCSVImplementation() *csvImplementation {
+func NewCSVStrategyImplementation() *csvImplementation {
 	return &csvImplementation{}
+}
+
+func (csvImp *csvImplementation) CanExecute(extension string) bool {
+	return extension == csvExtension
 }
 
 func (csvImp *csvImplementation) openFile(inputPath string) (io.ReadCloser, error) {
