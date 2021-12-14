@@ -75,18 +75,10 @@ func (parserService *parserService) groupBody(body [][]string, group *parserdoma
 		for _, columnIndex := range groupColIndexes {
 			groupRow += row[columnIndex] + group.Separator
 		}
+		groupRow = groupRow[:len(groupRow)-1]
 		newBody[index] = append(row, groupRow)
 	}
 	return newBody
-}
-
-func (parserService *parserService) validateHeaderIsDuplication(headers []string) error {
-	if commons.HasDuplicatedElementsInArray(headers) {
-		errMessage := fmt.Sprintf("more than one headers found with same name [headers: %s]",
-			strings.Join(headers, ","))
-		return errors.New(errMessage)
-	}
-	return nil
 }
 
 func (parserService *parserService) groupTableColumns(headers []string, body [][]string) *domain.TableDomain {
@@ -103,6 +95,16 @@ func (parserService *parserService) groupTableColumns(headers []string, body [][
 	return outputTable
 }
 
+func (parserService *parserService) validateHeaderDuplication(headers []string) error {
+	headers = commons.TrimSpacesFromArray(headers)
+	if commons.HasDuplicatedElementsInArray(headers) {
+		errMessage := fmt.Sprintf("more than one headers found with same name [headers: %s]",
+			strings.Join(headers, ","))
+		return errors.New(errMessage)
+	}
+	return nil
+}
+
 func (parserService *parserService) Standardize(inputTable *domain.TableDomain) (outputTable *domain.TableDomain, err error) {
 	logger.Debug().Log("Standardizing matrix header names...")
 	stdHeaders, err := parserService.standardizeHeaderNames(inputTable.GetHeader())
@@ -115,7 +117,7 @@ func (parserService *parserService) Standardize(inputTable *domain.TableDomain) 
 	outputTable = parserService.groupTableColumns(stdHeaders, inputTable.GetBody())
 
 	logger.Debug().Log("Validating if some header is duplicated...")
-	err = parserService.validateHeaderIsDuplication(outputTable.GetHeader())
+	err = parserService.validateHeaderDuplication(outputTable.GetHeader())
 	if err != nil {
 		logger.Error().Log("Error in validation:", err.Error())
 		return nil, err
