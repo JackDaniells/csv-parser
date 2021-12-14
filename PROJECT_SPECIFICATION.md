@@ -20,7 +20,11 @@ Requirements:
 •	Create unit tests
 •	Project must be implemented in Golang 1.16+
 •	Project must have a clear folder structure, scalable and simple (not a single file script)
-•	In the README file, you should cover at least: - How to run the project - Explain your chosen architecture. Why do you think it is a good fit for this problem? - How you would evolve your submitted code
+•	In the README file, you should cover at least:
+    - How to run the project
+    - Explain your chosen architecture. 
+    - Why do you think it is a good fit for this problem?
+    - How you would evolve your submitted code
 
 Notes:
 •	IMPORTANT: Don’t post your project on public online repositories
