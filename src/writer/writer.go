@@ -1,7 +1,9 @@
 package writer
 
 import (
+	"fmt"
 	"rain-csv-parser/src/domain"
+	"rain-csv-parser/src/pkg/logger"
 )
 
 type (
@@ -20,6 +22,19 @@ func NewWriterService(ioStrategy IOStrategy) *writerService {
 	}
 }
 
-func (writer *writerService) Write(matrix *domain.TableDomain, outputPath string) error {
-	return writer.ioStrategy.Write(matrix.Data, outputPath)
+func (writer *writerService) Write(table *domain.TableDomain, outputPath string) error {
+	logger.Debug().Log(fmt.Sprintf("Writing output in %s...", outputPath))
+
+	outputMatrix := [][]string{
+		table.GetHeader(),
+	}
+	outputMatrix = append(outputMatrix, table.GetBody()...)
+
+	err := writer.ioStrategy.Write(outputMatrix, outputPath)
+	if err != nil {
+		logger.Error().Log("Error when write output data: ", err.Error())
+		return err
+	}
+
+	return nil
 }

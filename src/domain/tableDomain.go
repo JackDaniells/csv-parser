@@ -3,50 +3,46 @@ package domain
 import "errors"
 
 type TableDomain struct {
-	Data [][]string
+	header []string
+	body   [][]string
 }
 
-func NewMatrixDomain(data [][]string) *TableDomain {
+func NewTableDomain(header []string, body [][]string) *TableDomain {
 	return &TableDomain{
-		Data: data,
+		header: header,
+		body:   body,
 	}
 }
 
-func (m *TableDomain) IsEmpty() bool {
-	return len(m.Data) == 0
+func (m *TableDomain) GetHeader() []string {
+	return m.header
 }
 
-func (m *TableDomain) GetHeaders() []string {
-	return m.Data[0]
-}
-
-func (m *TableDomain) SetHeaders(headers []string) {
-	m.Data[0] = headers
+func (m *TableDomain) SetHeader(headers []string) {
+	m.header = headers
 }
 
 func (m *TableDomain) GetBody() [][]string {
-	return m.Data[1:]
+	return m.body
 }
 
-func (m *TableDomain) HasBody() bool {
-	return len(m.GetBody()) != 0
+func (m *TableDomain) SetBody(body [][]string) {
+	m.body = body
 }
 
 func (m *TableDomain) GetRow(index int) ([]string, error) {
-	body := m.GetBody()
-	if index >= len(body) {
+	if index >= len(m.body) {
 		return nil, errors.New("index out of bounds")
 	}
-	return body[index], nil
+	return m.body[index], nil
 }
 
 func (m *TableDomain) GetColumn(index int) (col []string, err error) {
-	body := m.GetBody()
-	if index < 0 || index >= len(body[0]) {
+	if index < 0 || index >= len(m.body[0]) {
 		return nil, errors.New("index out of bounds")
 	}
 
-	for _, row := range body {
+	for _, row := range m.body {
 		col = append(col, row[index])
 	}
 	return col, nil

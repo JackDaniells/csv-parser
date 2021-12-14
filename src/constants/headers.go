@@ -1,10 +1,10 @@
 package constants
 
 const (
-	HeaderID        = "id"
-	HeaderFirstName = "first name"
-	HeaderLastName  = "last name"
-	HeaderName      = "name"
-	HeaderEmail     = "e-mail"
-	HeaderSalary    = "salary"
+	HeaderID        = "ID"
+	HeaderFirstName = "First Name"
+	HeaderLastName  = "Last Name"
+	HeaderFullName  = "Full Name"
+	HeaderEmail     = "E-mail"
+	HeaderSalary    = "Salary"
 )

@@ -10,7 +10,7 @@ func TrimSpacesFromArray(arr []string) []string {
 	return out
 }
 
-func FindInArray(arr []string, field string) bool {
+func FindInArrayString(arr []string, field string) bool {
 	for _, item := range arr {
 		if item == field {
 			return true
@@ -19,13 +19,22 @@ func FindInArray(arr []string, field string) bool {
 	return false
 }
 
-func FindFieldIndexInArray(arr []string, field string) int {
-	for index, item := range arr {
+func FindInArrayInt(arr []int, field int) bool {
+	for _, item := range arr {
 		if item == field {
-			return index
+			return true
 		}
 	}
-	return -1
+	return false
+}
+
+func FindIndexInArray(arr []string, field string) (bool, int) {
+	for index, item := range arr {
+		if item == field {
+			return true, index
+		}
+	}
+	return false, -1
 }
 
 func HasDuplicatedElementsInArray(arr []string) bool {
