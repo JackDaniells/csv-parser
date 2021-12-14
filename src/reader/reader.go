@@ -20,7 +20,7 @@ func NewReaderService(ioStrategy IOStrategy) *readerService {
 	}
 }
 
-func (reader *readerService) Read(inputPath string) (matrix *domain.MatrixDomain, err error) {
+func (reader *readerService) Read(inputPath string) (matrix *domain.TableDomain, err error) {
 	data, err := reader.ioStrategy.Read(inputPath)
 	if err != nil {
 		return nil, err

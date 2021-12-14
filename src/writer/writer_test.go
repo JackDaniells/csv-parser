@@ -15,7 +15,7 @@ func Test_writerService_Write(t *testing.T) {
 		ioStrategy IOStrategy
 	}
 	type args struct {
-		matrix     *domain.MatrixDomain
+		matrix     *domain.TableDomain
 		outputPath string
 	}
 	tests := []struct {

@@ -20,6 +20,6 @@ func NewWriterService(ioStrategy IOStrategy) *writerService {
 	}
 }
 
-func (writer *writerService) Write(matrix *domain.MatrixDomain, outputPath string) error {
+func (writer *writerService) Write(matrix *domain.TableDomain, outputPath string) error {
 	return writer.ioStrategy.Write(matrix.Data, outputPath)
 }

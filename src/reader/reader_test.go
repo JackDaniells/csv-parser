@@ -22,7 +22,7 @@ func Test_readerService_Read(t *testing.T) {
 		name       string
 		fields     fields
 		args       args
-		wantMatrix *domain.MatrixDomain
+		wantMatrix *domain.TableDomain
 		wantErr    bool
 	}{
 		{
