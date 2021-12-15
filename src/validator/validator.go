@@ -45,11 +45,11 @@ func (validatorService *validatorService) validateRequiredFieldsAreFilled(inputT
 	return invalidRows
 }
 
-func (validatorService *validatorService) checkDuplicatedFieldsForUniqueColumn(table *domain.TableDomain, column string) (
+func (validatorService *validatorService) checkDuplicatedFieldsForUniqueColumn(table *domain.TableDomain, headerName string) (
 	duplicatedElements [][]int, err error) {
-	columnFound, idColIndex := commons.FindIndexInArray(table.GetHeader(), column)
-	if !columnFound {
-		return nil, errors.New("unique column not found")
+	headerFound, idColIndex := commons.FindIndexInArray(table.GetHeader(), headerName)
+	if !headerFound {
+		return nil, errors.New("unique header name not found")
 	}
 	colData, err := table.GetColumn(idColIndex)
 	if err != nil {
@@ -63,11 +63,8 @@ func (validatorService *validatorService) checkDuplicatedFieldsForUniqueColumn(t
 func (validatorService *validatorService) invalidateDuplicatedRowIndexes(duplicateds [][]int) []int {
 	invalidIndexes := []int{}
 	for _, row := range duplicateds {
-		for i, cell := range row {
-			// maintain first element and discard others
-			if i > 0 {
-				invalidIndexes = append(invalidIndexes, cell)
-			}
+		for _, cell := range row {
+			invalidIndexes = append(invalidIndexes, cell)
 		}
 	}
 	return invalidIndexes
