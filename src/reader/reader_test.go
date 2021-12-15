@@ -10,7 +10,7 @@ import (
 
 func Test_readerService_Read(t *testing.T) {
 	inputPath := "/some/path.anything"
-	matrixMocked := domain.BuildSampleMatrixDomainData()
+	matrixMocked := domain.BuildSampleTableDomainData()
 
 	type fields struct {
 		ioStrategy IOStrategy
@@ -30,7 +30,7 @@ func Test_readerService_Read(t *testing.T) {
 			fields: fields{
 				ioStrategy: func() IOStrategy {
 					strategyMocked := &mocks.IOStrategy{}
-					strategyMocked.On("Read", inputPath).Return(matrixMocked.Data, nil)
+					strategyMocked.On("Read", inputPath).Return(matrixMocked.GetStringMatrixOutput(), nil)
 					return strategyMocked
 				}(),
 			},

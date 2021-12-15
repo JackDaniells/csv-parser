@@ -47,3 +47,38 @@ func HasDuplicatedElementsInArray(arr []string) bool {
 	}
 	return false
 }
+
+func GetDuplicatedElementsIndexesInArray(arr []string) [][]int {
+	visited := make(map[string][]int)
+	for index, element := range arr {
+		visited[element] = append(visited[element], index)
+	}
+
+	duplicated := [][]int{}
+	for _, indexes := range visited {
+		if len(indexes) > 1 {
+			duplicated = append(duplicated, indexes)
+		}
+	}
+	return duplicated
+}
+
+func RemoveDuplicatedFields(arr []int) (output []int) {
+	keys := make(map[int]bool)
+	for _, item := range arr {
+		if _, value := keys[item]; !value {
+			keys[item] = true
+			output = append(output, item)
+		}
+	}
+	return output
+}
+
+func ConvertMatrixToArray(matrix [][]int) (arr []int) {
+	for _, row := range matrix {
+		for _, cell := range row {
+			arr = append(arr, cell)
+		}
+	}
+	return arr
+}

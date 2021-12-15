@@ -47,3 +47,11 @@ func (m *TableDomain) GetColumn(index int) (col []string, err error) {
 	}
 	return col, nil
 }
+
+func (m *TableDomain) GetStringMatrixOutput() [][]string {
+	outputMatrix := [][]string{
+		m.GetHeader(),
+	}
+	outputMatrix = append(outputMatrix, m.GetBody()...)
+	return outputMatrix
+}

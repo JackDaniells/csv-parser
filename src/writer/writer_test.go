@@ -9,7 +9,13 @@ import (
 
 func Test_writerService_Write(t *testing.T) {
 	outputPath := "/some/path.anything"
-	matrixMocked := domain.BuildSampleMatrixDomainData()
+	tableMocked := domain.BuildSampleTableDomainData()
+	bodyMocked := [][]string{
+		{"h0", "h1", "h2"},
+		{"d00", "d01", "d03"},
+		{"d10", "d11", "d13"},
+		{"d20", "d21", "d23"},
+	}
 
 	type fields struct {
 		ioStrategy IOStrategy
@@ -29,12 +35,12 @@ func Test_writerService_Write(t *testing.T) {
 			fields: fields{
 				ioStrategy: func() IOStrategy {
 					strategyMocked := &mocks.IOStrategy{}
-					strategyMocked.On("Write", matrixMocked.Data, outputPath).Return(nil)
+					strategyMocked.On("Write", bodyMocked, outputPath).Return(nil)
 					return strategyMocked
 				}(),
 			},
 			args: args{
-				matrix:     matrixMocked,
+				matrix:     tableMocked,
 				outputPath: outputPath,
 			},
 			wantErr: false,
@@ -44,12 +50,12 @@ func Test_writerService_Write(t *testing.T) {
 			fields: fields{
 				ioStrategy: func() IOStrategy {
 					strategyMocked := &mocks.IOStrategy{}
-					strategyMocked.On("Write", matrixMocked.Data, outputPath).Return(errors.New("write_error"))
+					strategyMocked.On("Write", bodyMocked, outputPath).Return(errors.New("write_error"))
 					return strategyMocked
 				}(),
 			},
 			args: args{
-				matrix:     matrixMocked,
+				matrix:     tableMocked,
 				outputPath: outputPath,
 			},
 			wantErr: true,
