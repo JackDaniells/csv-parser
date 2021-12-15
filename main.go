@@ -7,6 +7,7 @@ import (
 	"rain-csv-parser/src/parser"
 	"rain-csv-parser/src/pkg/logger"
 	"rain-csv-parser/src/reader"
+	"rain-csv-parser/src/validator"
 	"rain-csv-parser/src/writer"
 )
 
@@ -23,9 +24,11 @@ func run() error {
 	if err != nil {
 		return err
 	}
+
 	readerService := reader.NewReaderService(strategy)
-	writerService := writer.NewWriterService(strategy)
 	parserService := parser.NewParserService(tableColumns, matcherSelector, columnGrouper)
+	validatorService := validator.NewValidatorService(tableColumns)
+	writerService := writer.NewWriterService(strategy)
 
 	inputTable, err := readerService.Read(fmt.Sprintf("%s.%s", INPUT_PATH, FORMAT))
 	if err != nil {
@@ -37,7 +40,17 @@ func run() error {
 		return err
 	}
 
-	err = writerService.Write(stdTable, fmt.Sprintf("%s_correct.%s", OUTPUT_PATH, FORMAT))
+	validTableOutput, invalidTableOutput, err := validatorService.Validate(stdTable)
+	if err != nil {
+		return err
+	}
+
+	err = writerService.Write(validTableOutput, fmt.Sprintf("%s_correct.%s", OUTPUT_PATH, FORMAT))
+	if err != nil {
+		return err
+	}
+
+	err = writerService.Write(invalidTableOutput, fmt.Sprintf("%s_bad.%s", OUTPUT_PATH, FORMAT))
 	if err != nil {
 		return err
 	}
