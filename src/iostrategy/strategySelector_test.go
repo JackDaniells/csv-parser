@@ -1,6 +1,7 @@
 package iostrategy
 
 import (
+	"rain-csv-parser/src/iostrategy/implementations/csv"
 	"testing"
 )
 
@@ -31,7 +32,11 @@ func Test_ioStrategySelector_GetStrategy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ioStrategy := &ioStrategySelector{}
+			ioStrategy := &ioStrategySelector{
+				strategies: []IOStrategy{
+					csv.NewCSVStrategyImplementation(),
+				},
+			}
 			_, err := ioStrategy.GetStrategy(tt.args.strategy)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetStrategy() error = %v, wantErr %v", err, tt.wantErr)
