@@ -73,3 +73,12 @@ func RemoveDuplicatedFields(arr []int) (output []int) {
 	}
 	return output
 }
+
+func ConvertMatrixToArray(matrix [][]int) (arr []int) {
+	for _, row := range matrix {
+		for _, cell := range row {
+			arr = append(arr, cell)
+		}
+	}
+	return arr
+}

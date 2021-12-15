@@ -41,10 +41,7 @@ func run() error {
 		return err
 	}
 
-	validTableOutput, invalidTableOutput, err := validatorService.Validate(stdTable)
-	if err != nil {
-		return err
-	}
+	validTableOutput, invalidTableOutput := validatorService.Validate(stdTable)
 
 	err = writerService.Write(validTableOutput, fmt.Sprintf("%s_correct.%s", config.OUTPUT_PATH, config.FORMAT))
 	if err != nil {

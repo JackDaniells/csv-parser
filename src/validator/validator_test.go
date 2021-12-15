@@ -166,8 +166,8 @@ func Test_validatorService_checkDuplicatedFieldsForUniqueColumn(t *testing.T) {
 					mockHeader := []string{"money", "money maker", "test"}
 					mockBody := [][]string{
 						{"d00", "d01", "d03"},
-						{"d10", "d11", "d13"},
-						{"d00", "d21", "d23"},
+						{"d00", "d11", "d13"},
+						{"d10", "d21", "d23"},
 						{"d10", "d31", "d33"},
 					}
 					return domain.NewTableDomain(mockHeader, mockBody)
@@ -175,8 +175,8 @@ func Test_validatorService_checkDuplicatedFieldsForUniqueColumn(t *testing.T) {
 				columnName: "money",
 			},
 			wantDuplicatedElements: [][]int{
-				{0, 2},
-				{1, 3},
+				{0, 1},
+				{2, 3},
 			},
 			wantErr: false,
 		},
@@ -202,8 +202,168 @@ func Test_validatorService_checkDuplicatedFieldsForUniqueColumn(t *testing.T) {
 				t.Errorf("checkDuplicatedFieldsForUniqueColumn() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
 			if !reflect.DeepEqual(gotDuplicatedElements, tt.wantDuplicatedElements) {
 				t.Errorf("checkDuplicatedFieldsForUniqueColumn() gotDuplicatedElements = %v, want %v", gotDuplicatedElements, tt.wantDuplicatedElements)
+			}
+		})
+	}
+}
+
+func Test_validatorService_filterInvalidIndexesInTable(t *testing.T) {
+	type args struct {
+		inputBody      [][]string
+		invalidIndexes []int
+	}
+	tests := []struct {
+		name            string
+		args            args
+		wantValidBody   [][]string
+		wantInvalidBody [][]string
+	}{
+		{
+			name: "Should put rows with invalid indexes in invalid body and rest in valid body",
+			args: args{
+				inputBody: [][]string{
+					{"d00", "d01", "d03"},
+					{"d10", "d11", "d13"},
+					{"d20", "d21", "d23"},
+				},
+				invalidIndexes: []int{0},
+			},
+			wantValidBody: [][]string{
+				{"d10", "d11", "d13"},
+				{"d20", "d21", "d23"},
+			},
+			wantInvalidBody: [][]string{
+				{"d00", "d01", "d03"},
+			},
+		},
+		{
+			name: "Should return all rows with valid body when invalid index array is empty",
+			args: args{
+				inputBody: [][]string{
+					{"d00", "d01", "d03"},
+					{"d10", "d11", "d13"},
+					{"d20", "d21", "d23"},
+				},
+				invalidIndexes: []int{},
+			},
+			wantValidBody: [][]string{
+				{"d00", "d01", "d03"},
+				{"d10", "d11", "d13"},
+				{"d20", "d21", "d23"},
+			},
+			wantInvalidBody: [][]string{},
+		},
+		{
+			name: "Should return all rows with invalid body when invalid index array is filled with all indexes",
+			args: args{
+				inputBody: [][]string{
+					{"d00", "d01", "d03"},
+					{"d10", "d11", "d13"},
+					{"d20", "d21", "d23"},
+				},
+				invalidIndexes: []int{0, 1, 2},
+			},
+			wantValidBody: [][]string{},
+			wantInvalidBody: [][]string{
+				{"d00", "d01", "d03"},
+				{"d10", "d11", "d13"},
+				{"d20", "d21", "d23"},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			validatorService := &validatorService{}
+			gotValidBody, gotInvalidBody := validatorService.filterInvalidIndexesInTableBody(tt.args.inputBody, tt.args.invalidIndexes)
+			if !reflect.DeepEqual(gotValidBody, tt.wantValidBody) {
+				t.Errorf("filterInvalidIndexesInTableBody() gotValidBody = %v, want %v", gotValidBody, tt.wantValidBody)
+			}
+			if !reflect.DeepEqual(gotInvalidBody, tt.wantInvalidBody) {
+				t.Errorf("filterInvalidIndexesInTableBody() gotInvalidBody = %v, want %v", gotInvalidBody, tt.wantInvalidBody)
+			}
+		})
+	}
+}
+
+func Test_validatorService_Validate(t *testing.T) {
+	sampleInputTable := domain.BuildSampleTableDomainData()
+	type fields struct {
+		tableColumns domain.TableColumnSchemas
+	}
+	type args struct {
+		inputTable *domain.TableDomain
+	}
+	tests := []struct {
+		name              string
+		fields            fields
+		args              args
+		wantValidOutput   *domain.TableDomain
+		wantInvalidOutput *domain.TableDomain
+		wantErr           bool
+	}{
+		{
+			name: "Should return all input table as valid when no have table columns required or unique",
+			fields: fields{
+				tableColumns: domain.TableColumnSchemas{},
+			},
+			args: args{
+				inputTable: sampleInputTable,
+			},
+			wantValidOutput:   sampleInputTable,
+			wantInvalidOutput: domain.NewTableDomain(sampleInputTable.GetHeader(), [][]string{}),
+			wantErr:           false,
+		},
+		{
+			name: "Should return all input table as invalid when some table column required are not filled",
+			fields: fields{
+				tableColumns: domain.TableColumnSchemas{
+					{
+						Name:     "test",
+						Unique:   false,
+						Required: true,
+					},
+				},
+			},
+			args: args{
+				inputTable: sampleInputTable,
+			},
+			wantValidOutput:   domain.NewTableDomain(sampleInputTable.GetHeader(), [][]string{}),
+			wantInvalidOutput: sampleInputTable,
+			wantErr:           false,
+		},
+		{
+			name: "Should return all input table as invalid when some table column unique are not filled",
+			fields: fields{
+				tableColumns: domain.TableColumnSchemas{
+					{
+						Name:     "test",
+						Unique:   true,
+						Required: false,
+					},
+				},
+			},
+			args: args{
+				inputTable: sampleInputTable,
+			},
+			wantValidOutput:   domain.NewTableDomain(sampleInputTable.GetHeader(), [][]string{}),
+			wantInvalidOutput: sampleInputTable,
+			wantErr:           false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			validatorService := &validatorService{
+				tableColumns: tt.fields.tableColumns,
+			}
+			gotValidOutput, gotInvalidOutput := validatorService.Validate(tt.args.inputTable)
+			if !reflect.DeepEqual(gotValidOutput, tt.wantValidOutput) {
+				t.Errorf("Validate() gotValidOutput = %v, want %v", gotValidOutput, tt.wantValidOutput)
+			}
+			if !reflect.DeepEqual(gotInvalidOutput, tt.wantInvalidOutput) {
+				t.Errorf("Validate() gotInvalidOutput = %v, want %v", gotInvalidOutput, tt.wantInvalidOutput)
 			}
 		})
 	}
