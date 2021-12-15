@@ -1,5 +1,5 @@
 main.go
-config.go
 
-**/constants/*
+config/*
+src/constants/*
 **/mocks/*

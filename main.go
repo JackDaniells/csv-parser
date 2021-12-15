@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"rain-csv-parser/config"
 	"rain-csv-parser/src/iostrategy"
 	"rain-csv-parser/src/iostrategy/implementations/csv"
 	"rain-csv-parser/src/parser"
@@ -13,14 +14,14 @@ import (
 
 func run() error {
 	logger.Info().Log("Initializing application...")
-	tableColumns := createTableColumns()
-	matcherSelector := createMatcherSelector()
-	columnGrouper := createColumnGrouper()
+	tableColumns := config.CreateTableColumns()
+	matcherSelector := config.CreateMatcherSelector()
+	columnGrouper := config.CreateColumnGrouper()
 
 	csvStrategy := csv.NewCSVStrategyImplementation()
 	strategySelector := iostrategy.NewIOStrategySelector()
 	strategySelector.AddStrategy(csvStrategy)
-	strategy, err := strategySelector.GetStrategy(FORMAT)
+	strategy, err := strategySelector.GetStrategy(config.FORMAT)
 	if err != nil {
 		return err
 	}
@@ -30,7 +31,7 @@ func run() error {
 	validatorService := validator.NewValidatorService(tableColumns)
 	writerService := writer.NewWriterService(strategy)
 
-	inputTable, err := readerService.Read(fmt.Sprintf("%s.%s", INPUT_PATH, FORMAT))
+	inputTable, err := readerService.Read(fmt.Sprintf("%s.%s", config.INPUT_PATH, config.FORMAT))
 	if err != nil {
 		return err
 	}
@@ -45,12 +46,12 @@ func run() error {
 		return err
 	}
 
-	err = writerService.Write(validTableOutput, fmt.Sprintf("%s_correct.%s", OUTPUT_PATH, FORMAT))
+	err = writerService.Write(validTableOutput, fmt.Sprintf("%s_correct.%s", config.OUTPUT_PATH, config.FORMAT))
 	if err != nil {
 		return err
 	}
 
-	err = writerService.Write(invalidTableOutput, fmt.Sprintf("%s_bad.%s", OUTPUT_PATH, FORMAT))
+	err = writerService.Write(invalidTableOutput, fmt.Sprintf("%s_bad.%s", config.OUTPUT_PATH, config.FORMAT))
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"rain-csv-parser/src/constants"
@@ -13,7 +13,7 @@ const (
 	FORMAT      = "csv"
 )
 
-func createTableColumns() domain.TableColumnSchemas {
+func CreateTableColumns() domain.TableColumnSchemas {
 	return domain.TableColumnSchemas{
 		{
 			Name:          constants.HeaderID,
@@ -54,7 +54,7 @@ func createTableColumns() domain.TableColumnSchemas {
 	}
 }
 
-func createMatcherSelector() parserdomain.MatchSelector {
+func CreateMatcherSelector() parserdomain.MatchSelector {
 	return parserdomain.MatchSelector{
 		{
 			Matches:  []string{constants.HeaderFirstName, constants.HeaderFullName},
@@ -67,7 +67,7 @@ func createMatcherSelector() parserdomain.MatchSelector {
 	}
 }
 
-func createColumnGrouper() parserdomain.ColumnGrouper {
+func CreateColumnGrouper() parserdomain.ColumnGrouper {
 	return parserdomain.ColumnGrouper{
 		{
 			Headers:   []string{constants.HeaderFirstName, constants.HeaderLastName},
