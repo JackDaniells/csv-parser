@@ -7,29 +7,6 @@ import (
 	"testing"
 )
 
-func createMockedTableColumnsSchemas() domain.TableColumnSchemas {
-	return domain.TableColumnSchemas{
-		{
-			Name:          "test",
-			Unique:        false,
-			Required:      false,
-			PossibleWords: []string{"test", "tested", "mock", "stub"},
-		},
-		{
-			Name:          "money",
-			PossibleWords: []string{"money", "salary", "wage", "pay", "earnings", "income"},
-			Unique:        false,
-			Required:      true,
-		},
-		{
-			Name:          "money maker",
-			PossibleWords: []string{"maker", "functionary", "servant", "worker"},
-			Unique:        false,
-			Required:      true,
-		},
-	}
-}
-
 func createMockedMatchSelector() parserdomain.MatchSelector {
 	return parserdomain.MatchSelector{
 		{
@@ -67,7 +44,7 @@ func Test_parserService_standardizeHeaderName(t *testing.T) {
 		{
 			name: "Should return same header name passed when is not found in any possible words array",
 			fields: fields{
-				tableColumns: createMockedTableColumnsSchemas(),
+				tableColumns: domain.BuildSampleTableColumnSchemas(),
 			},
 			args: args{
 				originalHeaderName: "header named",
@@ -78,7 +55,7 @@ func Test_parserService_standardizeHeaderName(t *testing.T) {
 		{
 			name: "Should convert header name to TableColumnSchema name when is in our possible words array",
 			fields: fields{
-				tableColumns: createMockedTableColumnsSchemas(),
+				tableColumns: domain.BuildSampleTableColumnSchemas(),
 			},
 			args: args{
 				originalHeaderName: "mock",
@@ -89,7 +66,7 @@ func Test_parserService_standardizeHeaderName(t *testing.T) {
 		{
 			name: "Should search header in matcher selector when input header is found in more than one possible words array",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: createMockedMatchSelector(),
 			},
 			args: args{
@@ -101,7 +78,7 @@ func Test_parserService_standardizeHeaderName(t *testing.T) {
 		{
 			name: "Should return error when input header is found in more than one possible words array and doesnt have matcher selector compatible",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: createMockedMatchSelector(),
 			},
 			args: args{
@@ -148,7 +125,7 @@ func Test_parserService_standardizeHeaderNames(t *testing.T) {
 		{
 			name: "Should return same input headers when no one header is found in table column's possible words",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: nil,
 			},
 			args: args{
@@ -160,7 +137,7 @@ func Test_parserService_standardizeHeaderNames(t *testing.T) {
 		{
 			name: "Should convert header names found in table column's possible words",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: nil,
 			},
 			args: args{
@@ -172,7 +149,7 @@ func Test_parserService_standardizeHeaderNames(t *testing.T) {
 		{
 			name: "Should return error when some header was found in more than one table columns and no have matcherSelector compatible",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: nil,
 			},
 			args: args{
@@ -331,7 +308,7 @@ func Test_parserService_Standardize(t *testing.T) {
 		{
 			name: "Should return output table when standardize runs with no errors",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: createMockedMatchSelector(),
 				columnGrouper:   createMockedColumnGrouper(),
 			},
@@ -344,7 +321,7 @@ func Test_parserService_Standardize(t *testing.T) {
 		{
 			name: "Should return error when some exception occurs in match selector",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: createMockedMatchSelector(),
 				columnGrouper:   createMockedColumnGrouper(),
 			},
@@ -357,7 +334,7 @@ func Test_parserService_Standardize(t *testing.T) {
 		{
 			name: "Should return error when some exception occurs in duplication validation",
 			fields: fields{
-				tableColumns:    createMockedTableColumnsSchemas(),
+				tableColumns:    domain.BuildSampleTableColumnSchemas(),
 				matcherSelector: createMockedMatchSelector(),
 				columnGrouper:   createMockedColumnGrouper(),
 			},

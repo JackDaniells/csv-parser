@@ -9,7 +9,7 @@ import (
 
 func Test_writerService_Write(t *testing.T) {
 	outputPath := "/some/path.anything"
-	tableMocked := domain.BuildSampleMatrixDomainData()
+	tableMocked := domain.BuildSampleTableDomainData()
 	bodyMocked := [][]string{
 		{"h0", "h1", "h2"},
 		{"d00", "d01", "d03"},
