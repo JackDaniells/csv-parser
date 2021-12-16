@@ -7,10 +7,9 @@ import (
 )
 
 const (
-	FILE_NAME   = "roster1"
-	INPUT_PATH  = "input/" + FILE_NAME
-	OUTPUT_PATH = "output/" + FILE_NAME
-	FORMAT      = "csv"
+	INPUT_FOLDER  = "input"
+	OUTPUT_FOLDER = "output"
+	FORMAT        = "csv"
 )
 
 func CreateTableColumns() domain.TableColumnSchemas {
