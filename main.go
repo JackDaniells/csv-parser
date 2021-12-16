@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"rain-csv-parser/config"
@@ -15,15 +14,7 @@ import (
 	"strings"
 )
 
-func run() error {
-	filename := strings.TrimSpace(os.Args[1])
-
-	if filename == "" {
-		err := errors.New("you must pass name of the file to be processed as a parameter")
-		logger.Error().Log(err.Error())
-		return err
-	}
-
+func run(filename string) error {
 	logger.Info().Log("Initializing application...")
 	tableColumns := config.CreateTableColumns()
 	matcherSelector := config.CreateMatcherSelector()
@@ -68,7 +59,13 @@ func run() error {
 }
 
 func main() {
-	err := run()
+	filename := ""
+
+	if filename == "" && len(os.Args) < 2 {
+		panic("you must pass name of the file to be processed as a parameter")
+	}
+	filename = strings.TrimSpace(os.Args[1])
+	err := run(filename)
 	if err != nil {
 		logger.Error().Log("Application exited with error!")
 	}

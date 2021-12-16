@@ -4,14 +4,14 @@ func BuildSampleTableColumnSchemas() TableColumnSchemas {
 	return TableColumnSchemas{
 		{
 			Name:          "test",
-			Unique:        false,
+			Unique:        true,
 			Required:      false,
 			PossibleWords: []string{"test", "tested", "mock", "stub"},
 		},
 		{
 			Name:          "money",
 			PossibleWords: []string{"money", "salary", "wage", "pay", "earnings", "income"},
-			Unique:        false,
+			Unique:        true,
 			Required:      true,
 		},
 		{
