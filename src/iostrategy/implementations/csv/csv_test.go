@@ -222,7 +222,7 @@ func Test_csvImplementation_Write(t *testing.T) {
 					{"fake", "csv", "header"},
 					{"fake", "csv", "body"},
 				},
-				outputPath: "mocks/out.csv",
+				outputPath: "mocks/test_out.csv",
 			},
 			wantErr: false,
 		},
