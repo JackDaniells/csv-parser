@@ -2,7 +2,7 @@ package commons
 
 import "strings"
 
-func TrimSpacesFromArray(arr []string) []string {
+func TrimSpacesFromElementsInArray(arr []string) []string {
 	out := []string{}
 	for _, item := range arr {
 		out = append(out, strings.TrimSpace(item))
@@ -10,7 +10,8 @@ func TrimSpacesFromArray(arr []string) []string {
 	return out
 }
 
-func FindInArrayString(arr []string, field string) bool {
+func FindInStringArray(arr []string, field string) bool {
+	arr = TrimSpacesFromElementsInArray(arr)
 	for _, item := range arr {
 		if item == field {
 			return true
@@ -19,7 +20,7 @@ func FindInArrayString(arr []string, field string) bool {
 	return false
 }
 
-func FindInArrayInt(arr []int, field int) bool {
+func FindInIntArray(arr []int, field int) bool {
 	for _, item := range arr {
 		if item == field {
 			return true
@@ -29,6 +30,7 @@ func FindInArrayInt(arr []int, field int) bool {
 }
 
 func FindIndexInArray(arr []string, field string) (bool, int) {
+	arr = TrimSpacesFromElementsInArray(arr)
 	for index, item := range arr {
 		if item == field {
 			return true, index
@@ -63,7 +65,7 @@ func GetDuplicatedElementsIndexesInArray(arr []string) [][]int {
 	return duplicated
 }
 
-func RemoveDuplicatedFields(arr []int) (output []int) {
+func RemoveDuplicatedElementsInArray(arr []int) (output []int) {
 	keys := make(map[int]bool)
 	for _, item := range arr {
 		if _, value := keys[item]; !value {
@@ -74,11 +76,12 @@ func RemoveDuplicatedFields(arr []int) (output []int) {
 	return output
 }
 
-func ConvertMatrixToArray(matrix [][]int) (arr []int) {
+func ConvertMatrixToArray(matrix [][]int) []int {
+	out := []int{}
 	for _, row := range matrix {
 		for _, cell := range row {
-			arr = append(arr, cell)
+			out = append(out, cell)
 		}
 	}
-	return arr
+	return out
 }

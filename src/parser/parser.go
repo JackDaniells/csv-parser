@@ -96,7 +96,7 @@ func (parserService *parserService) groupTableColumns(headers []string, body [][
 }
 
 func (parserService *parserService) validateHeaderDuplication(headers []string) error {
-	headers = commons.TrimSpacesFromArray(headers)
+	headers = commons.TrimSpacesFromElementsInArray(headers)
 	if commons.HasDuplicatedElementsInArray(headers) {
 		errMessage := fmt.Sprintf("more than one headers found with same name [headers: %s]",
 			strings.Join(headers, ","))

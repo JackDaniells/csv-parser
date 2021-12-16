@@ -15,7 +15,7 @@ type (
 
 func (colMatcher ColumnMatcher) allColumnsInMatchesFound(matches []string) bool {
 	for _, field := range colMatcher.Matches {
-		found := commons.FindInArrayString(matches, field)
+		found := commons.FindInStringArray(matches, field)
 		if !found {
 			return false
 		}
