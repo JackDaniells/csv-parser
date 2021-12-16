@@ -115,6 +115,9 @@ Using this config strategy, changing the formatting of the input table remains s
 
 For the evolution and improvement of the project, it would be interesting:
 
+* Evaluate whether the proposed implementation meets the needs of the user who will use it (check if the execution through the terminal is intuitive,
+need to insert more logs to monitor the execution, validation of cell data types, deletion of unused columns).
+
 * Implementing more robust logic for standardizing column names, or finding ways to set a default overall structure of input table files.
 
 * Read and aggregate the application's output tables in order to group all executions into a single output pattern, and do single-column validations based on the entire dataset.
@@ -124,7 +127,7 @@ it is only necessary to respect the `IOStrategy` interface established.
 
 * Enable the processing of more than one input files at the same time, and allow grouping of all outputs into the same pair of tables.
 
+* Implement more table standardization rules, such as column deletion and data type validation in cells.
+
 * Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent, 
 which would simplify the implementation.
-
-* Implement more table standardization rules, such as column deletion and data type validation in cells
