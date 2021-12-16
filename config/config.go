@@ -66,8 +66,8 @@ func CreateMatcherSelector() parserdomain.MatchSelector {
 	}
 }
 
-func CreateColumnGrouper() parserdomain.ColumnGrouper {
-	return parserdomain.ColumnGrouper{
+func CreateColumnGrouper() parserdomain.GroupAggregator {
+	return parserdomain.GroupAggregator{
 		{
 			Headers:   []string{constants.HeaderFirstName, constants.HeaderLastName},
 			GroupName: constants.HeaderFullName,
