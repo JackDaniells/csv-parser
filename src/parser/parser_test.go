@@ -264,7 +264,7 @@ func Test_parserService_validateHeaderDuplication(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Should return error when some header is duplicated before trim spaces",
+			name: "Should return error when some header is duplicated after trim spaces",
 			args: args{
 				headers: []string{"some", "simple", "header", "test", "some "},
 			},

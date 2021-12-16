@@ -43,7 +43,7 @@ func Test_validatorService_checkAllRequiredFieldsAreFilledInRow(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "Should return false when some required field are not filled before trim spaces",
+			name: "Should return false when some required field are not filled after trim spaces",
 			fields: fields{
 				tableColumns: domain.BuildSampleTableColumnSchemas(),
 			},
@@ -195,7 +195,7 @@ func Test_validatorService_checkAnyUniqueColumnHaveDuplications(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Should return true when some have unique field has duplication before trim spaces",
+			name: "Should return true when some have unique field has duplication after trim spaces",
 			fields: fields{
 				tableColumns: domain.BuildSampleTableColumnSchemas(),
 			},

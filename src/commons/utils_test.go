@@ -57,7 +57,7 @@ func TestFindInStringArray(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Should return true if element is found in array before trim spaces",
+			name: "Should return true if element is found in array after trim spaces",
 			args: args{
 				arr:   []string{"a", "b", "  c "},
 				field: "c",
@@ -139,7 +139,7 @@ func TestFindIndexInArray(t *testing.T) {
 			wantIndex: 4,
 		},
 		{
-			name: "Should return true and element index if element is found in array before trim spaces",
+			name: "Should return true and element index if element is found in array after trim spaces",
 			args: args{
 				arr:   []string{"a", "b", "c", "d", "   e "},
 				field: "e",
