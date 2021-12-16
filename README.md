@@ -110,6 +110,8 @@ type ColumnGroup struct {
 
 For the evolution and improvement of the project, it would be interesting:
 
+* Enable the processing of more than one input files at the same time, and allow grouping of all outputs into the same pair of tables.
+* Read and aggregate the application's output tables in order to group all executions into a single output pattern, and do single-column validations based on the entire dataset.
 * Implement the processing of other file structure types. The read and write architecture has already been designed thinking about new file formats, 
 it is only necessary to respect the `IOStrategy` interface established.
 * Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent, 
