@@ -58,4 +58,40 @@ All the algorithm's execution logic is based on the four implemented services, a
 * `writer` service receive the tables, one at time, and writes them to the output folder.
 
 The read file format configuration, mandatory columns, possible column names, match selector and column grouper
-are defined in the `config/config.go` file, allowing the adjustment of these parameters in a centralized and simple way.
+are defined in the `config.go` file, allowing the adjustment of these parameters in a centralized and simple way.
+
+### `TableColumnSchema`
+
+this object is responsible for mapping the name of the column, if it is required, unique and the list of possible synonymous words to find during column standardization.
+
+```go
+type TableColumnSchema struct {
+    Name          string
+    Unique        bool
+    Required      bool
+    PossibleWords []string
+}
+```
+
+### `ColumnMatcher`
+
+this struct is responsible for selecting from a list of combinations for a column names, which column name should be kept.
+
+```go
+type ColumnMatcher struct {
+    Matches  []string
+    Selected string
+}
+```
+
+### `ColumnMatcher`
+
+this struct is responsible for mapping a set of column names that must be grouped into a new column.
+
+```go
+type ColumnGroup struct {
+    Headers   []string
+    GroupName string
+    Separator string
+}
+```
