@@ -17,7 +17,7 @@ The only requirement for this project is to have [Go 1.17+](https://go.dev/dl/) 
 go mod download
 ```
 
-### Run the app
+### Execution
 
 ```shell
 go run main.go <csv_file_name>
@@ -27,6 +27,11 @@ go run main.go <csv_file_name>
 >
 > The app will get files from `input` folder and write in `output` folder by default.
 > If you want to change folders, you can do so by modifying `INPUT_FOLDER` and `OUTPUT_FOLDER` variables in `config/config.go` file.
+
+### Tests
+```shell
+go test ./... -cover
+```
 
 # Folder architecture
 
@@ -49,13 +54,13 @@ The structure with the main project folders is specified below:
 ```
 
 All the algorithm's execution logic is based on the four implemented services, and follows the sequence:
-* `reader` service reads the specified file and returns an object of type `TableDomain`.
-* `parser` service formats the object, applying:
-  * standardization rules for naming headers per match
-  * selection in case of more than one match per header and
-  * column grouping, returning a standardized table object.
-* `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
-* `writer` service receive the tables, one at time, and writes them to the output folder.
+1. `reader` service reads the specified file and returns an object of type `TableDomain`.
+2. `parser` service formats the object, applying:
+   * standardization rules for naming headers per match
+   * selection in case of more than one match per header and
+   * column grouping, returning a standardized table object.
+3. `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
+4. `writer` service receive the tables, one at time, and writes them to the output folder.
 
 ## Config structure
 
