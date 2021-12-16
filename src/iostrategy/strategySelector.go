@@ -2,6 +2,7 @@ package iostrategy
 
 import (
 	"errors"
+	"fmt"
 	"rain-csv-parser/src/pkg/logger"
 )
 
@@ -32,7 +33,7 @@ func (ioStrategy *ioStrategySelector) GetStrategy(extension string) (IOStrategy,
 		}
 	}
 
-	err := errors.New("implementation not found for this extension")
+	err := errors.New(fmt.Sprintf("implementation not found for %s extension", extension))
 	logger.Error().Log("Error when get strategy:", err.Error())
 	return nil, err
 }
