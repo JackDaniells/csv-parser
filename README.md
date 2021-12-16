@@ -118,6 +118,9 @@ For the evolution and improvement of the project, it would be interesting:
 * Evaluate whether the proposed implementation meets the needs of the user who will use it (check if the execution through the terminal is intuitive,
 need to insert more logs to monitor the execution, validation of cell data types, deletion of unused columns).
 
+* Change the `TableDomain` structure to make it more robust in order to have data body by columns rather than rows, 
+which would simplify the implementation of searching for duplicated elements, merging between tables and removing columns
+
 * Group the outputs of all executions into the same pair of correct and incorrect data tables.
 
 * Allow make unique field validations based on output correct data from previous executions.
