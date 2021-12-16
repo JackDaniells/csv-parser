@@ -84,7 +84,7 @@ type ColumnMatcher struct {
 }
 ```
 
-### `ColumnMatcher`
+### `ColumnGrouper`
 
 this struct is responsible for mapping a set of column names that must be grouped into a new column.
 
