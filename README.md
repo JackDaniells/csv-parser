@@ -57,10 +57,12 @@ All the algorithm's execution logic is based on the four implemented services, a
 * `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
 * `writer` service receive the tables, one at time, and writes them to the output folder.
 
+## config structure
+
 The read file format configuration, mandatory columns, possible column names, match selector and column grouper
 are defined in the `config.go` file, allowing the adjustment of these parameters in a centralized and simple way.
 
-### `TableColumnSchema`
+#### `TableColumnSchema`
 
 this object is responsible for mapping the name of the column, if it is required, unique and the list of possible synonymous words to find during column standardization.
 
@@ -73,7 +75,7 @@ type TableColumnSchema struct {
 }
 ```
 
-### `ColumnMatcher`
+#### `ColumnMatcher`
 
 this struct is responsible for selecting from a list of combinations for a column names, which column name should be kept.
 
@@ -84,7 +86,7 @@ type ColumnMatcher struct {
 }
 ```
 
-### `ColumnGrouper`
+#### `ColumnGrouper`
 
 this struct is responsible for mapping a set of column names that must be grouped into a new column.
 
