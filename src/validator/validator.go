@@ -49,20 +49,28 @@ func (validatorService *validatorService) validateRequiredFieldsAreFilled(inputT
 	return validBody, invalidBody
 }
 
-func (validatorService *validatorService) checkAnyUniqueColumnHaveDuplications(validatedBody [][]string, headers []string, row []string) bool {
+func (validatorService *validatorService) hasDuplicationWithValidBody(validBody [][]string, row []string, colIndex int) bool {
+	for _, validRow := range validBody {
+		if strings.TrimSpace(validRow[colIndex]) == strings.TrimSpace(row[colIndex]) {
+			return true
+		}
+	}
+	return false
+}
+
+func (validatorService *validatorService) checkAnyUniqueColumnHaveDuplications(validBody [][]string, headers []string, row []string) bool {
 	for _, col := range validatorService.tableColumns {
 		if !col.Unique {
 			continue
 		}
+
 		headerFound, colIndex := commons.FindIndexInArray(headers, col.Name)
 		if !headerFound {
 			continue
 		}
 
-		for _, validatedRow := range validatedBody {
-			if strings.TrimSpace(validatedRow[colIndex]) == strings.TrimSpace(row[colIndex]) {
-				return true
-			}
+		if validatorService.hasDuplicationWithValidBody(validBody, row, colIndex) {
+			return true
 		}
 
 	}
