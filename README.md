@@ -30,21 +30,29 @@ go run main.go <csv_file_name>
 
 # Folder architecture
 
+The structure with the main project folders is specified below:
 ```
 - config
 - - config.go     // project and table formatting configs
 - input           // files to be processed
 - output          // file processing result
 - src             // program implementation
-- - iostrategy    // file reading and writing strategies implementation
+- - domain        // application domain classes
+- - iostrategy    // IO file strategies implementation
 - - - implementations
 - - - - csv       // csv implementation
-- - parser        // service responsible for standardizing tables
-- - reader        // service responsible for read tables
-- - validator     // service responsible for validating column rules
-- - writer        // service responsible for write tables
+- - parser        // parser service
+- - reader        // reader service
+- - validator     // validator service
+- - writer        // writer service
 - main.go
 ```
 
+All the algorithm's execution logic is based on the four implemented services, and follows the sequence:
+* `reader` service reads the specified file and returns an object of type `TableDomain`.
+* `parser` service formats the object, applying [i]standardization rules for naming headers per match, [ii]selection in case of more than one match per header and [iii]column grouping, returning a standardized table object.
+* `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
+* `writer` service receive the tables, one at time, and writes them to the output folder.
+
 The read file format configuration, mandatory columns, possible column names, match selector and column grouper
-are in the `config/config.go` file too, allowing the adjustment of these parameters in a centralized and simple way.
+are defined in the `config/config.go` file, allowing the adjustment of these parameters in a centralized and simple way.
