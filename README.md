@@ -9,18 +9,20 @@ This project was developed as Rain interview challenge, and its function is:
 
 ### Prerequisites
 
-The only requirement for this project is to have [Go 1.17+](https://go.dev/dl/) installed on your machine
+The only requirement for this project is to have [Go 1.17+](https://go.dev/dl/) installed on your machine.
 
 ### Installation
 
+To install the external libs in the project, run the command below:
 ```shell
 go mod download
 ```
 
 ### Execution
 
+To execute parser, use the run command passing as parameter the input file to be run (no need to specify the file format).
 ```shell
-go run main.go <csv_file_name>
+go run main.go roster1
 ```
 
 > 🚩 **Note**
@@ -59,11 +61,12 @@ The structure with the main project folders is specified below:
 All the algorithm's execution logic is based on the four implemented services, and follows the sequence:
 1. `reader` service reads the specified file and returns an object of type `TableDomain`.
 2. `parser` service formats the object, applying:
-   * standardization rules for naming headers per match
-   * selection in case of more than one match per header and
-   * column grouping, returning a standardized table object.
-3. `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
-4. `writer` service receive the tables, one at time, and writes them to the output folder.
+   * standardization rules for naming headers per match;
+   * selection in case of more than one match per header and;
+   * column grouping, returning a standardized table object;
+3. `validator` service takes the standardized object and applies rules for `required` and `unique` fields, 
+and returns two table objects, one with the correct and the other with the bad data for file inputed.
+4. `writer` service receive the table objects, one at time, and writes them to the output folder.
 
 ## Config structure
 
@@ -72,8 +75,7 @@ are defined in the `config.go` file, allowing the adjustment of these parameters
 
 #### `TableColumnSchema`
 
-this object is responsible for mapping the name of the column, if it is required, unique and the list of possible synonymous words to find during column standardization.
-
+This struct is responsible for mapping the name of the column, if it is required, unique and the list of possible synonymous words to find as header name during column standardization.
 ```go
 type TableColumnSchema struct {
     Name          string
@@ -82,12 +84,11 @@ type TableColumnSchema struct {
     PossibleWords []string
 }
 ```
-> If a column is not found within the `TableColumnSchema` list, it is kept in the output table as a non-standard column.
+> If a column is not found within the `TableColumnSchema` list, it is kept in the output table as a not standardized column.
 
 #### `ColumnMatcher`
 
-this struct is responsible for selecting from a list of combinations for a column names, which column name should be kept.
-
+This struct is responsible for selecting from a list of combinations for a column names, which name should be selected.
 ```go
 type ColumnMatcher struct {
     Matches  []string
@@ -98,8 +99,7 @@ type ColumnMatcher struct {
 
 #### `ColumnGrouper`
 
-this struct is responsible for mapping a set of column names that must be grouped into a new column.
-
+This struct is responsible for mapping a set of column names that must be grouped into a new column.
 ```go
 type ColumnGroup struct {
     Headers   []string
@@ -109,14 +109,22 @@ type ColumnGroup struct {
 ```
 > If only part of the columns in the `ColumnGroup` list is found, the grouping is not performed.
 
+Using this config strategy, changing the formatting of the input table remains simple to change, but it can bring some problems, such as false positives when looking for possible column matches.
+
 # Future works
 
 For the evolution and improvement of the project, it would be interesting:
 
-* Enable the processing of more than one input files at the same time, and allow grouping of all outputs into the same pair of tables.
+* Implementing more robust logic for standardizing column names, or finding ways to set a default overall structure of input table files.
+
 * Read and aggregate the application's output tables in order to group all executions into a single output pattern, and do single-column validations based on the entire dataset.
+
 * Implement the processing of other file structure types. The read and write architecture has already been designed thinking about new file formats, 
 it is only necessary to respect the `IOStrategy` interface established.
+
+* Enable the processing of more than one input files at the same time, and allow grouping of all outputs into the same pair of tables.
+
 * Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent, 
 which would simplify the implementation.
+
 * Implement more table standardization rules, such as column deletion and data type validation in cells
