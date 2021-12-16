@@ -50,7 +50,10 @@ The structure with the main project folders is specified below:
 
 All the algorithm's execution logic is based on the four implemented services, and follows the sequence:
 * `reader` service reads the specified file and returns an object of type `TableDomain`.
-* `parser` service formats the object, applying [i]standardization rules for naming headers per match, [ii]selection in case of more than one match per header and [iii]column grouping, returning a standardized table object.
+* `parser` service formats the object, applying:
+  * standardization rules for naming headers per match
+  * selection in case of more than one match per header and
+  * column grouping, returning a standardized table object.
 * `validator` service takes the standardized object and applies rules for `required` and `unique` fields, and returns two table objects, one with the correct and the other with the faulty data.
 * `writer` service receive the tables, one at time, and writes them to the output folder.
 
