@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"errors"
 	"rain-csv-parser/src/commons"
 	"rain-csv-parser/src/domain"
 	"rain-csv-parser/src/pkg/logger"
@@ -24,80 +23,84 @@ func (validatorService *validatorService) isValidElement(element string) bool {
 
 func (validatorService *validatorService) checkAllRequiredFieldsAreFilledInRow(headers []string, row []string) bool {
 	for _, col := range validatorService.tableColumns {
-		if col.Required {
-			colFound, colIndex := commons.FindIndexInArray(headers, col.Name)
-			if !colFound || !validatorService.isValidElement(row[colIndex]) {
-				return false
-			}
+		if !col.Required {
+			continue
+		}
+		colFound, colIndex := commons.FindIndexInArray(headers, col.Name)
+		if !colFound || !validatorService.isValidElement(row[colIndex]) {
+			return false
 		}
 	}
 	return true
 }
 
-func (validatorService *validatorService) validateRequiredFieldsAreFilled(inputTable *domain.TableDomain) (invalidRows []int) {
+func (validatorService *validatorService) validateRequiredFieldsAreFilled(inputTable *domain.TableDomain) ([][]string, [][]string) {
+	validBody := [][]string{}
+	invalidBody := [][]string{}
+
 	tableHeader := inputTable.GetHeader()
-	for index, row := range inputTable.GetBody() {
-		if !validatorService.checkAllRequiredFieldsAreFilledInRow(tableHeader, row) {
-			invalidRows = append(invalidRows, index)
+	for _, row := range inputTable.GetBody() {
+		if validatorService.checkAllRequiredFieldsAreFilledInRow(tableHeader, row) {
+			validBody = append(validBody, row)
+		} else {
+			invalidBody = append(invalidBody, row)
 		}
 	}
-	return invalidRows
+	return validBody, invalidBody
 }
 
-func (validatorService *validatorService) checkDuplicatedFieldsForUniqueColumn(table *domain.TableDomain, headerName string) (
-	duplicatedElements [][]int, err error) {
-	headerFound, idColIndex := commons.FindIndexInArray(table.GetHeader(), headerName)
-	if !headerFound {
-		return nil, errors.New("unique header name not found")
+func (validatorService *validatorService) hasDuplicationWithValidBody(validBody [][]string, row []string, colIndex int) bool {
+	for _, validRow := range validBody {
+		if strings.TrimSpace(validRow[colIndex]) == strings.TrimSpace(row[colIndex]) {
+			return true
+		}
 	}
-	colData, err := table.GetColumn(idColIndex)
-	if err != nil {
-		return nil, err
-	}
-	colData = commons.TrimSpacesFromElementsInArray(colData)
-	duplicatedElements = commons.GetDuplicatedElementsIndexesInArray(colData)
-	return duplicatedElements, nil
+	return false
 }
 
-func (validatorService *validatorService) validateUniqueElements(table *domain.TableDomain) (invalidIndexes []int) {
+func (validatorService *validatorService) checkAnyUniqueColumnHaveDuplications(validBody [][]string, headers []string, row []string) bool {
 	for _, col := range validatorService.tableColumns {
-		if col.Unique {
-			duplicateds, err := validatorService.checkDuplicatedFieldsForUniqueColumn(table, col.Name)
-			if err != nil {
-				for index := range table.GetBody() {
-					invalidIndexes = append(invalidIndexes, index)
-				}
-				return invalidIndexes
-			}
-			invalidIndexes = append(invalidIndexes, commons.ConvertMatrixToArray(duplicateds)...)
+		if !col.Unique {
+			continue
 		}
+
+		headerFound, colIndex := commons.FindIndexInArray(headers, col.Name)
+		if !headerFound {
+			continue
+		}
+
+		if validatorService.hasDuplicationWithValidBody(validBody, row, colIndex) {
+			return true
+		}
+
 	}
-	return commons.RemoveDuplicatedElementsInArray(invalidIndexes)
+	return false
 }
 
-func (validatorService *validatorService) filterInvalidIndexesInTableBody(inputBody [][]string, invalidIndexes []int) (validBody [][]string, invalidBody [][]string) {
-	validBody = [][]string{}
-	invalidBody = [][]string{}
-	for i, row := range inputBody {
-		if commons.FindInIntArray(invalidIndexes, i) {
+func (validatorService *validatorService) validateUniqueElements(inputTable *domain.TableDomain) ([][]string, [][]string) {
+	validBody := [][]string{}
+	invalidBody := [][]string{}
+
+	for _, row := range inputTable.GetBody() {
+		if validatorService.checkAnyUniqueColumnHaveDuplications(validBody, inputTable.GetHeader(), row) {
 			invalidBody = append(invalidBody, row)
 		} else {
 			validBody = append(validBody, row)
 		}
 	}
-	return
+
+	return validBody, invalidBody
 }
 
 func (validatorService *validatorService) Validate(inputTable *domain.TableDomain) (
 	validOutput *domain.TableDomain, invalidOutput *domain.TableDomain) {
 
 	logger.Info().Log("validating if all required columns are filled...")
-	reqFieldProblemRows := validatorService.validateRequiredFieldsAreFilled(inputTable)
-	reqValidBody, reqInvalidBody := validatorService.filterInvalidIndexesInTableBody(inputTable.GetBody(), reqFieldProblemRows)
+	reqValidBody, reqInvalidBody := validatorService.validateRequiredFieldsAreFilled(inputTable)
 	reqValidOutput := domain.NewTableDomain(inputTable.GetHeader(), reqValidBody)
 
-	uniqueProblemRows := validatorService.validateUniqueElements(reqValidOutput)
-	uniqueValidBody, uniqueInvalidBody := validatorService.filterInvalidIndexesInTableBody(reqValidOutput.GetBody(), uniqueProblemRows)
+	logger.Info().Log("validating if unique columns doesnt have duplications...")
+	uniqueValidBody, uniqueInvalidBody := validatorService.validateUniqueElements(reqValidOutput)
 
 	invalidBody := append(reqInvalidBody, uniqueInvalidBody...)
 	validOutput = domain.NewTableDomain(inputTable.GetHeader(), uniqueValidBody)
