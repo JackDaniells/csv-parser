@@ -21,7 +21,7 @@ func Test_columnMatcher_allColumnsInMatchesFound(t *testing.T) {
 		want   bool
 	}{
 		{
-			name: "Should return true when all matches in the list are in columnMatcher in same order",
+			name: "Should return true when all matches in the list are in ColumnMatcher in same order",
 			fields: fields{
 				Matches:  []string{"A", "B"},
 				Selected: "A",
@@ -32,7 +32,7 @@ func Test_columnMatcher_allColumnsInMatchesFound(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Should return true when all matches in the list are in columnMatcher, no matter the element order",
+			name: "Should return true when all matches in the list are in ColumnMatcher, no matter the element order",
 			fields: fields{
 				Matches:  []string{"B", "A"},
 				Selected: "A",
@@ -43,7 +43,7 @@ func Test_columnMatcher_allColumnsInMatchesFound(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Should return false if some match in the list arent in columnMatcher",
+			name: "Should return false if some match in the list arent in ColumnMatcher",
 			fields: fields{
 				Matches:  []string{"A", "B", "C"},
 				Selected: "A",
@@ -54,7 +54,7 @@ func Test_columnMatcher_allColumnsInMatchesFound(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "Should return false if any match in the list are in columnMatcher",
+			name: "Should return false if any match in the list are in ColumnMatcher",
 			fields: fields{
 				Matches:  []string{"C", "D"},
 				Selected: "C",
@@ -67,7 +67,7 @@ func Test_columnMatcher_allColumnsInMatchesFound(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			colMatcher := columnMatcher{
+			colMatcher := ColumnMatcher{
 				Matches:  tt.fields.Matches,
 				Selected: tt.fields.Selected,
 			}
@@ -87,11 +87,11 @@ func TestMatchSelector_GetColumnMatcher(t *testing.T) {
 		name     string
 		selector MatchSelector
 		args     args
-		want     *columnMatcher
+		want     *ColumnMatcher
 	}{
 		{
 			name: "Should return first element in selector list when all header list for this element is in match list",
-			selector: []*columnMatcher{
+			selector: []*ColumnMatcher{
 				{
 					Matches:  []string{"B", "A"},
 					Selected: "B",
@@ -104,14 +104,14 @@ func TestMatchSelector_GetColumnMatcher(t *testing.T) {
 			args: args{
 				matches: argMatchList,
 			},
-			want: &columnMatcher{
+			want: &ColumnMatcher{
 				Matches:  []string{"B", "A"},
 				Selected: "B",
 			},
 		},
 		{
 			name: "Should return second element in selector list when all header list for this element is in match list",
-			selector: []*columnMatcher{
+			selector: []*ColumnMatcher{
 				{
 					Matches:  []string{"D", "A"},
 					Selected: "B",
@@ -124,14 +124,14 @@ func TestMatchSelector_GetColumnMatcher(t *testing.T) {
 			args: args{
 				matches: argMatchList,
 			},
-			want: &columnMatcher{
+			want: &ColumnMatcher{
 				Matches:  []string{"A", "B"},
 				Selected: "B",
 			},
 		},
 		{
 			name: "Should return nil when any element match with input",
-			selector: []*columnMatcher{
+			selector: []*ColumnMatcher{
 				{
 					Matches:  []string{"C", "A"},
 					Selected: "C",
@@ -148,7 +148,7 @@ func TestMatchSelector_GetColumnMatcher(t *testing.T) {
 		},
 		{
 			name: "When two elements is in match list can be selected for input argument, should return first one",
-			selector: []*columnMatcher{
+			selector: []*ColumnMatcher{
 				{
 					Matches:  []string{"B", "A"},
 					Selected: "B",
@@ -161,7 +161,7 @@ func TestMatchSelector_GetColumnMatcher(t *testing.T) {
 			args: args{
 				matches: argMatchList,
 			},
-			want: &columnMatcher{
+			want: &ColumnMatcher{
 				Matches:  []string{"B", "A"},
 				Selected: "B",
 			},

@@ -5,15 +5,15 @@ import (
 )
 
 type (
-	MatchSelector []*columnMatcher
+	MatchSelector []*ColumnMatcher
 
-	columnMatcher struct {
+	ColumnMatcher struct {
 		Matches  []string
 		Selected string
 	}
 )
 
-func (colMatcher columnMatcher) allColumnsInMatchesFound(matches []string) bool {
+func (colMatcher ColumnMatcher) allColumnsInMatchesFound(matches []string) bool {
 	for _, field := range colMatcher.Matches {
 		found := commons.FindInArrayString(matches, field)
 		if !found {
@@ -23,7 +23,7 @@ func (colMatcher columnMatcher) allColumnsInMatchesFound(matches []string) bool 
 	return true
 }
 
-func (selector MatchSelector) GetColumnMatcher(matches []string) *columnMatcher {
+func (selector MatchSelector) GetColumnMatcher(matches []string) *ColumnMatcher {
 	for _, sel := range selector {
 		if sel.allColumnsInMatchesFound(matches) {
 			return sel
