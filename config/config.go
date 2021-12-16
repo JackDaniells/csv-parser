@@ -7,10 +7,9 @@ import (
 )
 
 const (
-	FILE_NAME   = "roster1"
-	INPUT_PATH  = "input/" + FILE_NAME
-	OUTPUT_PATH = "output/" + FILE_NAME
-	FORMAT      = "csv"
+	INPUT_FOLDER  = "input"
+	OUTPUT_FOLDER = "output"
+	FORMAT        = "csv"
 )
 
 func CreateTableColumns() domain.TableColumnSchemas {
@@ -67,8 +66,8 @@ func CreateMatcherSelector() parserdomain.MatchSelector {
 	}
 }
 
-func CreateColumnGrouper() parserdomain.ColumnGrouper {
-	return parserdomain.ColumnGrouper{
+func CreateColumnGrouper() parserdomain.GroupAggregator {
+	return parserdomain.GroupAggregator{
 		{
 			Headers:   []string{constants.HeaderFirstName, constants.HeaderLastName},
 			GroupName: constants.HeaderFullName,

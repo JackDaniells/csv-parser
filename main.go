@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"rain-csv-parser/config"
 	"rain-csv-parser/src/iostrategy"
 	"rain-csv-parser/src/iostrategy/implementations/csv"
@@ -10,9 +12,18 @@ import (
 	"rain-csv-parser/src/reader"
 	"rain-csv-parser/src/validator"
 	"rain-csv-parser/src/writer"
+	"strings"
 )
 
 func run() error {
+	filename := strings.TrimSpace(os.Args[1])
+
+	if filename == "" {
+		err := errors.New("you must pass name of the file to be processed as a parameter")
+		logger.Error().Log(err.Error())
+		return err
+	}
+
 	logger.Info().Log("Initializing application...")
 	tableColumns := config.CreateTableColumns()
 	matcherSelector := config.CreateMatcherSelector()
@@ -31,7 +42,7 @@ func run() error {
 	validatorService := validator.NewValidatorService(tableColumns)
 	writerService := writer.NewWriterService(strategy)
 
-	inputTable, err := readerService.Read(fmt.Sprintf("%s.%s", config.INPUT_PATH, config.FORMAT))
+	inputTable, err := readerService.Read(fmt.Sprintf("%s/%s.%s", config.INPUT_FOLDER, filename, config.FORMAT))
 	if err != nil {
 		return err
 	}
@@ -43,12 +54,12 @@ func run() error {
 
 	validTableOutput, invalidTableOutput := validatorService.Validate(stdTable)
 
-	err = writerService.Write(validTableOutput, fmt.Sprintf("%s_correct.%s", config.OUTPUT_PATH, config.FORMAT))
+	err = writerService.Write(validTableOutput, fmt.Sprintf("%s/%s_correct.%s", config.OUTPUT_FOLDER, filename, config.FORMAT))
 	if err != nil {
 		return err
 	}
 
-	err = writerService.Write(invalidTableOutput, fmt.Sprintf("%s_bad.%s", config.OUTPUT_PATH, config.FORMAT))
+	err = writerService.Write(invalidTableOutput, fmt.Sprintf("%s/%s_bad.%s", config.OUTPUT_FOLDER, filename, config.FORMAT))
 	if err != nil {
 		return err
 	}

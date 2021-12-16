@@ -62,7 +62,7 @@ func TestColumnGroup_FindColumnIndexes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			group := &ColumnGroup{
+			group := &ColumnGrouper{
 				Headers:   tt.fields.Headers,
 				GroupName: tt.fields.GroupName,
 				Separator: tt.fields.Separator,

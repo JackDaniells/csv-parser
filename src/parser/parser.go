@@ -13,13 +13,13 @@ import (
 type parserService struct {
 	tableColumns    domain.TableColumnSchemas
 	matcherSelector parserdomain.MatchSelector
-	columnGrouper   parserdomain.ColumnGrouper
+	columnGrouper   parserdomain.GroupAggregator
 }
 
 func NewParserService(
 	tableColumns domain.TableColumnSchemas,
 	matcherSelector parserdomain.MatchSelector,
-	columnGrouper parserdomain.ColumnGrouper) *parserService {
+	columnGrouper parserdomain.GroupAggregator) *parserService {
 	return &parserService{
 		tableColumns:    tableColumns,
 		matcherSelector: matcherSelector,
@@ -61,13 +61,13 @@ func (parserService *parserService) standardizeHeaderNames(matrixHeaders []strin
 	return stdHeaders, nil
 }
 
-func (parserService *parserService) groupHeaders(headers []string, group *parserdomain.ColumnGroup) (
+func (parserService *parserService) groupHeaders(headers []string, group *parserdomain.ColumnGrouper) (
 	newHeader []string) {
 	newHeader = append(headers, group.GroupName)
 	return newHeader
 }
 
-func (parserService *parserService) groupBody(body [][]string, group *parserdomain.ColumnGroup, groupColIndexes []int) (
+func (parserService *parserService) groupBody(body [][]string, group *parserdomain.ColumnGrouper, groupColIndexes []int) (
 	newBody [][]string) {
 	newBody = body
 	for index, row := range body {
@@ -96,7 +96,7 @@ func (parserService *parserService) groupTableColumns(headers []string, body [][
 }
 
 func (parserService *parserService) validateHeaderDuplication(headers []string) error {
-	headers = commons.TrimSpacesFromArray(headers)
+	headers = commons.TrimSpacesFromElementsInArray(headers)
 	if commons.HasDuplicatedElementsInArray(headers) {
 		errMessage := fmt.Sprintf("more than one headers found with same name [headers: %s]",
 			strings.Join(headers, ","))

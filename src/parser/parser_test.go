@@ -16,8 +16,8 @@ func createMockedMatchSelector() parserdomain.MatchSelector {
 	}
 }
 
-func createMockedColumnGrouper() parserdomain.ColumnGrouper {
-	return parserdomain.ColumnGrouper{
+func createMockedColumnGrouper() parserdomain.GroupAggregator {
+	return parserdomain.GroupAggregator{
 		{
 			Headers:   []string{"day", "month"},
 			GroupName: "date",
@@ -110,7 +110,7 @@ func Test_parserService_standardizeHeaderNames(t *testing.T) {
 	type fields struct {
 		tableColumns    domain.TableColumnSchemas
 		matcherSelector parserdomain.MatchSelector
-		columnGrouper   parserdomain.ColumnGrouper
+		columnGrouper   parserdomain.GroupAggregator
 	}
 	type args struct {
 		matrixHeaders []string
@@ -193,7 +193,7 @@ func Test_parserService_groupTableColumns(t *testing.T) {
 	argHeaderNoGrouper := []string{"some", "simple", "test"}
 
 	type fields struct {
-		columnGrouper parserdomain.ColumnGrouper
+		columnGrouper parserdomain.GroupAggregator
 	}
 	type args struct {
 		headers []string
@@ -293,7 +293,7 @@ func Test_parserService_Standardize(t *testing.T) {
 	type fields struct {
 		tableColumns    domain.TableColumnSchemas
 		matcherSelector parserdomain.MatchSelector
-		columnGrouper   parserdomain.ColumnGrouper
+		columnGrouper   parserdomain.GroupAggregator
 	}
 	type args struct {
 		inputTable *domain.TableDomain

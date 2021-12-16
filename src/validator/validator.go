@@ -54,7 +54,7 @@ func (validatorService *validatorService) checkDuplicatedFieldsForUniqueColumn(t
 	if err != nil {
 		return nil, err
 	}
-	colData = commons.TrimSpacesFromArray(colData)
+	colData = commons.TrimSpacesFromElementsInArray(colData)
 	duplicatedElements = commons.GetDuplicatedElementsIndexesInArray(colData)
 	return duplicatedElements, nil
 }
@@ -72,14 +72,14 @@ func (validatorService *validatorService) validateUniqueElements(table *domain.T
 			invalidIndexes = append(invalidIndexes, commons.ConvertMatrixToArray(duplicateds)...)
 		}
 	}
-	return commons.RemoveDuplicatedFields(invalidIndexes)
+	return commons.RemoveDuplicatedElementsInArray(invalidIndexes)
 }
 
 func (validatorService *validatorService) filterInvalidIndexesInTableBody(inputBody [][]string, invalidIndexes []int) (validBody [][]string, invalidBody [][]string) {
 	validBody = [][]string{}
 	invalidBody = [][]string{}
 	for i, row := range inputBody {
-		if commons.FindInArrayInt(invalidIndexes, i) {
+		if commons.FindInIntArray(invalidIndexes, i) {
 			invalidBody = append(invalidBody, row)
 		} else {
 			validBody = append(validBody, row)
