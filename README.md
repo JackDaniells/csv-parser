@@ -1,7 +1,7 @@
 # Rain CSV Parser
 
-This project was developed as rain interview challenge , and its function is:
- * Read a csv file (one at time)
+This project was developed as Rain interview challenge, and its function is:
+ * Read csv files
  * Standardize data following the format (specified in `config` file)  
  * Generate an output with correct and bad data, where each output in a csv file.
 
