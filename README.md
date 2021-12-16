@@ -110,6 +110,7 @@ type ColumnGroup struct {
 
 For the evolution and improvement of the project, it would be interesting:
 
-* Enable processing of other file types. The read and write architecture has already been designed thinking about new file formats, 
-it is only necessary to respect the `IOStrategy` interface and add the new implementation inside `StrategySelector` object.
-* Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent.
+* Implement the processing of other file structure types. The read and write architecture has already been designed thinking about new file formats, 
+it is only necessary to respect the `IOStrategy` interface established.
+* Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent, 
+which would simplify the implementation.
