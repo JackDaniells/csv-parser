@@ -42,10 +42,13 @@ The structure with the main project folders is specified below:
 - input           // files to be processed
 - output          // file processing result
 - src             // program implementation
+- - commons       // useful common methos
+- - constants     // application constant list
 - - domain        // application domain classes
 - - iostrategy    // IO file strategies implementation
 - - - implementations
-- - - - csv       // csv implementation
+- - - - csv       // csv read and write implementation
+- - pkg           // methods that can be outsourced to other projects (like libs) 
 - - parser        // parser service
 - - reader        // reader service
 - - validator     // validator service
