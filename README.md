@@ -119,3 +119,4 @@ For the evolution and improvement of the project, it would be interesting:
 it is only necessary to respect the `IOStrategy` interface established.
 * Present a parallel approach for column validation (required and unique fields), because these validations are not interdependent, 
 which would simplify the implementation.
+* Implement more table standardization rules, such as column deletion and data type validation in cells
