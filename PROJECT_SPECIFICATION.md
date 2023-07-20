@@ -1,6 +1,6 @@
-Rain CSV Parser
+CSV Parser
 
-Our company needs to parse CSV files coming from different employers to create a list of eligible employees to sign up for Rain.
+Our company needs to parse CSV files coming from different employers to create a list of eligible employees to sign up in the system.
 
 Although files need to have key pieces of data, Rain does not control the overall structure of the files. For example, column names and order can be different from file to file.
 
