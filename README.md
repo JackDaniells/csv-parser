@@ -1,4 +1,4 @@
-# Rain CSV Parser
+# CSV Parser
 
 This project was developed as Rain interview challenge, and its function is:
  * Read csv file
